@@ -12,14 +12,14 @@
   (fn [app-db-atom args]
     (reset! app-db-atom (modifier-fn @app-db-atom args))))
 
-(defrecord Controller ^{:doc "
+(defrecord ^{:doc "
 This controller receives the commands from the UI and dispatches
 them to the functions that modify the state.
 
 - `params` function returns true because this controller should always be running
 - `start` function adds an empty todo list to the EntityDB
 - `handler` function dispatches commands from the UI to the modifier functions"} 
-  []
+  Controller []
   controller/IController
   (params [_ _] true)
   (start [_ params app-db]
