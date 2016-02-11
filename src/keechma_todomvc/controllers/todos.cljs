@@ -6,11 +6,20 @@
   (:require-macros [cljs.core.async.macros :refer [go]]))
 
 
-(defn updater! [modifier-fn]
+(defn updater!
+  "Commits the change to the app-db to the app-db atom."
+  [modifier-fn]
   (fn [app-db-atom args]
     (reset! app-db-atom (modifier-fn @app-db-atom args))))
 
-(defrecord Controller []
+(defrecord Controller ^{:doc "
+This controller receives the commands from the UI and dispatches
+them to the functions that modify the state.
+
+- `params` function returns true because this controller should always be running
+- `start` function adds an empty todo list to the EntityDB
+- `handler` function dispatches commands from the UI to the modifier functions"} 
+  []
   controller/IController
   (params [_ _] true)
   (start [_ params app-db]

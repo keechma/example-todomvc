@@ -2,7 +2,17 @@
   (:require [keechma.ui-component :as ui]))
 
 
-(defn render [ctx]
+(defn render
+  "Main app component. Renders all the other components.
+
+  Depends on the `:todos-by-status` subscription which returns
+  the list of todos for a status. This is used to check if there
+  are any todos in the EntityDB.
+
+  This component depends on `:new-todo`, `:todo-list`, `:footer`
+  and `:toggle-todos` components. Each of these components has
+  it's own context passed in."
+  [ctx]
   (fn []
     (let [todos-sub (ui/subscription ctx :todos-by-status [:all])
           has-todos? (pos? (count @todos-sub))]

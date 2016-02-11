@@ -7,6 +7,7 @@
 (enable-console-print!)
 
 (def app-definition
+  "Defines the application."
   {:routes [[":status" {:status "all"}]]
    :controllers {:todos (todos/->Controller)}
    :components components/system

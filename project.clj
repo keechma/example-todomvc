@@ -13,7 +13,8 @@
                  [keechma "0.1.0-SNAPSHOT"]]
   
   :plugins [[lein-figwheel "0.5.0-6"]
-            [lein-cljsbuild "1.1.2" :exclusions [[org.clojure/clojure]]]]
+            [lein-cljsbuild "1.1.2" :exclusions [[org.clojure/clojure]]]
+            [michaelblume/lein-marginalia "0.9.0"]]
 
   :source-paths ["src"]
 

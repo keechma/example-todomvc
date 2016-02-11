@@ -9,7 +9,13 @@
       (ui/send-command ctx :create-todo @new-todo)
       (reset! new-todo ""))))
 
-(defn render [ctx]
+(defn render
+  "Renders the input field for the new todo. Stores the todo
+  value inside the local atom, and when the user presses enter
+  sends the command to creat todo.
+
+  Todo is created by the `todos` controller."
+  [ctx]
   (let [new-todo (atom "")]
     (fn [] 
       [:input.new-todo
