@@ -1,4 +1,4 @@
-(ns keechma-todomvc.components.header
+(ns keechma-todomvc.components.new-todo
   (:require [keechma.ui-component :as ui]
             [reagent.core :refer [atom]]
             [keechma-todomvc.util :refer [is-enter?]]))
@@ -11,14 +11,12 @@
 
 (defn render [ctx]
   (let [new-todo (atom "")]
-    (fn []
-      [:header.header
-       [:h1 "todos"]
-       [:input.new-todo
-        {:placeholder "What needs to be done?"
-         :value @new-todo
-         :autofocus true
-         :on-key-down #(handle-key-down ctx % new-todo)
-         :on-change #(reset! new-todo (.. % -target -value))}]])))
+    (fn [] 
+      [:input.new-todo
+       {:placeholder "What needs to be done?"
+        :value @new-todo
+        :autofocus true
+        :on-key-down #(handle-key-down ctx % new-todo)
+        :on-change #(reset! new-todo (.. % -target -value))}])))
 
 (def component (ui/constructor {:renderer render}))

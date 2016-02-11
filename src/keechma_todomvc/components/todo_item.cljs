@@ -11,7 +11,8 @@
     [:input.toggle {:type "checkbox"
                     :checked (:completed todo)
                     :on-change #(ui/send-command ctx :toggle-todo todo)}]
-    [:label (:title todo)]]
+    [:label (:title todo)]
+    [:button.destroy {:on-click #(ui/send-command ctx :destroy-todo todo)}]]
    (when is-editing?
      [(ui/component ctx :todo-input)])])
 
