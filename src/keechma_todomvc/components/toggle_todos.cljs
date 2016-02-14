@@ -1,7 +1,9 @@
 (ns keechma-todomvc.components.toggle-todos
   (:require [keechma.ui-component :as ui]))
 
-(defn render [ctx]
+(defn render
+  "Renders the checkbox component which toggles the status of all components."
+  [ctx]
   (fn []
     (let [active-sub (ui/subscription ctx :todos-by-status [:active])]
       [:input.toggle-all

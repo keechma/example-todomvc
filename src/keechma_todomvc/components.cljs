@@ -7,10 +7,13 @@
             [keechma-todomvc.components.todo-input :as todo-input]
             [keechma-todomvc.components.toggle-todos :as toggle-todos]))
 
-(def system {:main app/component
-             :new-todo (assoc new-todo/component :topic :todos)
-             :footer (assoc footer/component :topic :todos)
-             :todo-item (assoc todo-item/component :topic :todos)
-             :todo-list todo-list/component
-             :todo-input (assoc todo-input/component :topic :todos)
-             :toggle-todos (assoc toggle-todos/component :topic :todos)})
+(def system
+  "Defines the component system. All the components that have
+  the `:topic` assoced to them send commands to the `todos` controller."
+  {:main app/component
+   :new-todo (assoc new-todo/component :topic :todos)
+   :footer (assoc footer/component :topic :todos)
+   :todo-item (assoc todo-item/component :topic :todos)
+   :todo-list todo-list/component
+   :todo-input (assoc todo-input/component :topic :todos)
+   :toggle-todos (assoc toggle-todos/component :topic :todos)})
