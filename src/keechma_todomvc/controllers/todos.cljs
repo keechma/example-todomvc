@@ -10,7 +10,7 @@
   "Commits the change to the app-db to the app-db atom."
   [modifier-fn]
   (fn [app-db-atom args]
-    (reset! app-db-atom (modifier-fn @app-db-atom args))))
+    (swap! app-db-atom modifier-fn args)))
 
 (defrecord ^{:doc "
 This controller receives the commands from the UI and dispatches
