@@ -25,27 +25,29 @@
 
   :clean-targets ^{:protect false} ["resources/public/js/compiled" "target"]
 
-  :cljsbuild {:builds
-              [{:id "dev"
-                :source-paths ["src"]
-
-                ;; If no code is to be run, set :figwheel true for continued automagical reloading
-                :figwheel {:on-jsload "keechma-todomvc.core/on-js-reload"}
-
-                :compiler {:main keechma-todomvc.core
-                           :asset-path "js/compiled/out"
-                           :output-to "resources/public/js/compiled/keechma_todomvc.js"
-                           :output-dir "resources/public/js/compiled/out"
-                           :source-map-timestamp true}}
-               ;; This next build is an compressed minified build for
-               ;; production. You can build this with:
-               ;; lein cljsbuild once min
-               {:id "min"
-                :source-paths ["src"]
-                :compiler {:output-to "resources/public/js/compiled/keechma_todomvc.js"
-                           :main keechma-todomvc.core
-                           :optimizations :advanced
-                           :pretty-print false}}]}
+  :cljsbuild
+  {:builds
+   [{:id "dev"
+     :source-paths ["src"]
+     :figwheel {:on-jsload "keechma-todomvc.app/restart!"}
+     :compiler {:main                 keechma-todomvc.app
+                :optimizations        :none
+                :output-to            "resources/public/js/app.js"
+                :output-dir           "resources/public/js/dev"
+                :asset-path           "js/dev"
+                :source-map-timestamp true}}
+    ;; This next build is an compressed minified build for
+    ;; production. You can build this with:
+    ;; lein cljsbuild once min
+    {:id "min"
+     :source-paths ["src"]
+     :compiler {:main            keechma-todomvc.app
+                :optimizations   :advanced
+                :output-to       "resources/public/js/app.js"
+                :output-dir      "resources/public/js/min"
+                :elide-asserts   true
+                :closure-defines {goog.DEBUG false}
+                :pretty-print    false}}]}
 
   :figwheel {;; :http-server-root "public" ;; default and assumes "resources"
              ;; :server-port 3449 ;; default
