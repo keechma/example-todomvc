@@ -4,16 +4,22 @@
   :license {:name "MIT"}
 
   :min-lein-version "2.5.3"
-  
-  :dependencies [[org.clojure/clojure "1.7.0"]
-                 [org.clojure/clojurescript "1.7.170"]
-                 [org.clojure/core.async "0.2.374"
+
+  :dependencies [[org.clojure/clojure "1.10.1"]
+                 [org.clojure/clojurescript "1.10.597"]
+                 [org.clojure/core.async "0.7.559"
                   :exclusions [org.clojure/tools.reader]]
-                 [keechma "0.1.0-SNAPSHOT"]]
-  
-  :plugins [[lein-figwheel "0.5.0-6"]
-            [lein-cljsbuild "1.1.2" :exclusions [[org.clojure/clojure]]]
-            [michaelblume/lein-marginalia "0.9.0"]]
+                 [reagent "0.9.1"]
+                 [keechma "0.3.14"
+                  :exclusions [cljsjs/react-with-addons
+                               cljsjs/react-dom
+                               cljsjs/react-dom-server]]
+                 [keechma/entitydb "0.1.6"]]
+
+  :plugins [[lein-figwheel "0.5.19"]
+            [lein-cljsbuild "1.1.7"
+             :exclusions [[org.clojure/clojure]]]
+            [lein-marginalia "0.9.1"]]
 
   :source-paths ["src"]
 
