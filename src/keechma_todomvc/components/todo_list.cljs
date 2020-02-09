@@ -1,25 +1,32 @@
 (ns keechma-todomvc.components.todo-list
-  (:require (keechma.ui-component :as ui)))
+  "# Todo List component"
+  (:require [keechma-todomvc.ui :refer [<comp comp> route> sub>]]))
 
 (defn render
-  "Renders the list of todos. This component gets the list of todos
-  from the `:todos` subscription and the current editing id from the
-  `:editing-id` subscription.
+  "## Renders a list of currently visible todos
 
-  Each todo item is rendered by the `:todo-item` component which receives
-  the todo entity and `is-editing?` (based on the todo entity id and the
-  current editing id)"
-  [ctx] 
-  (fn []
-    (let [todos-sub (ui/subscription ctx :todos)
-          todo-item-component (ui/component ctx :todo-item)
-          editing-id-sub (ui/subscription ctx :editing-id)
-          editing-id @editing-id-sub]
-      [:ul.todo-list
-       (for [todo @todos-sub]
-         ^{:key (:id todo)}
-         [(ui/component ctx :todo-item) todo (= (:id todo) editing-id)])])))
+  `todo` visiblity is controlled by the current `route`.
 
-(def component (ui/constructor {:subscription-deps [:todos :editing-id]
-                                :component-deps [:todo-item]
-                                :renderer render}))
+### Component Deps
+
+- `:todo-item` Each list item is rendered by a `:todo-item` component
+  that receives the `todo` and the calculated `is-editing?` value as
+  arguments.
+
+### Subscription Deps
+
+- `:todos-by-status` returns `todos` with a `status`
+- `:edit-todo` returns the `todo` currently being edited, or nil"
+  [ctx]
+  (let [route-status (keyword (route> ctx :status))
+        is-editing? (fn [id] (= id (:id (sub> ctx :edit-todo))))
+        todo-item (fn [{id :id :as todo}]
+                    ^{:key id} [comp> ctx :todo-item todo (is-editing? id)])]
+    [:ul.todo-list
+     (seq (into [] (map todo-item) (sub> ctx :todos-by-status route-status)))]))
+
+(def component
+  (<comp :renderer render
+         :component-deps [:todo-item]
+         :subscription-deps [:todos-by-status
+                             :edit-todo]))
