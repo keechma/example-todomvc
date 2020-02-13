@@ -4,42 +4,50 @@
   :license {:name "MIT"}
 
   :min-lein-version "2.5.3"
-  
-  :dependencies [[org.clojure/clojure "1.7.0"]
-                 [org.clojure/clojurescript "1.7.170"]
-                 [org.clojure/core.async "0.2.374"
+
+  :dependencies [[org.clojure/clojure "1.10.1"]
+                 [org.clojure/clojurescript "1.10.597"]
+                 [org.clojure/core.async "0.7.559"
                   :exclusions [org.clojure/tools.reader]]
-                 [keechma "0.1.0-SNAPSHOT"]]
-  
-  :plugins [[lein-figwheel "0.5.0-6"]
-            [lein-cljsbuild "1.1.2" :exclusions [[org.clojure/clojure]]]
-            [michaelblume/lein-marginalia "0.9.0"]]
+                 [reagent "0.9.1"]
+                 [keechma "0.3.14"
+                  :exclusions [cljsjs/react-with-addons
+                               cljsjs/react-dom
+                               cljsjs/react-dom-server]]
+                 [keechma/entitydb "0.1.6"]]
+
+  :plugins [[lein-figwheel "0.5.19"]
+            [lein-cljsbuild "1.1.7"
+             :exclusions [[org.clojure/clojure]]]
+            [lein-marginalia "0.9.1"]]
 
   :source-paths ["src"]
 
   :clean-targets ^{:protect false} ["resources/public/js/compiled" "target"]
 
-  :cljsbuild {:builds
-              [{:id "dev"
-                :source-paths ["src"]
-
-                ;; If no code is to be run, set :figwheel true for continued automagical reloading
-                :figwheel {:on-jsload "keechma-todomvc.core/on-js-reload"}
-
-                :compiler {:main keechma-todomvc.core
-                           :asset-path "js/compiled/out"
-                           :output-to "resources/public/js/compiled/keechma_todomvc.js"
-                           :output-dir "resources/public/js/compiled/out"
-                           :source-map-timestamp true}}
-               ;; This next build is an compressed minified build for
-               ;; production. You can build this with:
-               ;; lein cljsbuild once min
-               {:id "min"
-                :source-paths ["src"]
-                :compiler {:output-to "resources/public/js/compiled/keechma_todomvc.js"
-                           :main keechma-todomvc.core
-                           :optimizations :advanced
-                           :pretty-print false}}]}
+  :cljsbuild
+  {:builds
+   [{:id "dev"
+     :source-paths ["src"]
+     :figwheel {:on-jsload "keechma-todomvc.app/restart!"}
+     :compiler {:main                 keechma-todomvc.app
+                :optimizations        :none
+                :output-to            "resources/public/js/app.js"
+                :output-dir           "resources/public/js/dev"
+                :asset-path           "js/dev"
+                :source-map-timestamp true}}
+    ;; This next build is an compressed minified build for
+    ;; production. You can build this with:
+    ;; lein cljsbuild once min
+    {:id "min"
+     :source-paths ["src"]
+     :compiler {:main            keechma-todomvc.app
+                :optimizations   :advanced
+                :output-to       "resources/public/js/app.js"
+                :output-dir      "resources/public/js/min"
+                :elide-asserts   true
+                :closure-defines {goog.DEBUG false}
+                :pretty-print    false}}]}
 
   :figwheel {;; :http-server-root "public" ;; default and assumes "resources"
              ;; :server-port 3449 ;; default

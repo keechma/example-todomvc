@@ -1,33 +1,45 @@
 (ns keechma-todomvc.components.app
-  (:require [keechma.ui-component :as ui]))
-
+  "# Main app component"
+  (:require [keechma-todomvc.ui :refer [<comp comp> sub>]]))
 
 (defn render
-  "Main app component. Renders all the other components.
+  "## Renders the top level UI
 
-  Depends on the `:todos-by-status` subscription which returns
-  the list of todos for a status. This is used to check if there
-  are any todos in the EntityDB.
+  Some elements are rendered inline, others are implemented as
+  `components`. Each `component` will have its own `context` provided.
 
-  This component depends on `:new-todo`, `:todo-list`, `:footer`
-  and `:toggle-todos` components. Each of these components has
-  it's own context passed in."
+### Component Deps
+
+- `:new-todo` top field where new `todos` are entered
+- `:toggle-todos` checkbox to the left of `:new-todo`
+- `:todo-list` main body list of `todos`
+- `:footer` active count, filtering, clearing
+
+### Subscription Deps
+
+- `:has-todos?` returns true if there are any todos in the EntityDB."
   [ctx]
-  (fn []
-    (let [todos-sub (ui/subscription ctx :todos-by-status [:all])
-          has-todos? (pos? (count @todos-sub))]
-      [:section.todoapp
-       [:header.header
-        [:h1 "todos"]
-        [(ui/component ctx :new-todo)]]
-       (when has-todos? 
-         [:section.main
-          [(ui/component ctx :toggle-todos)]
-          [(ui/component ctx :todo-list)]])
-       (when has-todos? [(ui/component ctx :footer)])])))
+  [:<>
+   [:section.todoapp
+    [:header.header
+     [:h1 "todos"]
+     [comp> ctx :new-todo]]
+    (when (sub> ctx :has-todos?)
+      [:<>
+       [:section.main
+        [comp> ctx :toggle-todos]
+        [comp> ctx :todo-list]]
+       [comp> ctx :footer]])]
+   [:footer.info
+    [:p "Double-click to edit a todo"]
+    [:p
+     [:a {:href "https://keechma.com"} "Keechma"] " "
+     [:a {:href "http://todomvc.com"} "TodoMVC"]]]])
 
 (def component
-  (ui/constructor
-   {:renderer render
-    :component-deps [:new-todo :todo-list :footer :toggle-todos]
-    :subscription-deps [:todos-by-status]}))
+  (<comp :renderer render
+         :component-deps [:new-todo
+                          :toggle-todos
+                          :todo-list
+                          :footer]
+         :subscription-deps [:has-todos?]))
