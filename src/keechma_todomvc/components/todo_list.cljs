@@ -23,7 +23,7 @@
         todo-item (fn [{id :id :as todo}]
                     ^{:key id} [comp> ctx :todo-item todo (is-editing? id)])]
     [:ul.todo-list
-     (seq (into [] (map todo-item) (sub> ctx :todos-by-status route-status)))]))
+     (doall (map todo-item (sub> ctx :todos-by-status route-status)))]))
 
 (def component
   (<comp :renderer render
